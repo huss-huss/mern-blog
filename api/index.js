@@ -1,15 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const dbConnect = require('./config/dbConnect');
+const userRoute = require('./routes/user.route');
 
 const app = express();
 const port =  3000;
 
 dbConnect();
 
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
+app.use(express.json());
+app.use('/api/users', userRoute);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
