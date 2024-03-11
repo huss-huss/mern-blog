@@ -9,13 +9,13 @@ const signup = async (req, res,next) => {
        next(errorHandler(400, 'All fields are required'));
     }
 
-    // const user = await User
-    //     .findOne({ email })
-    //     .select('-password');
+    const user = await User
+        .findOne({ email })
+        .select('-password');
 
-    // if (user){
-    //   next(errorHandler(400, 'User already exists'));
-    // }
+    if (user){
+      next(errorHandler(400, 'User already exists'));
+    }
 
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
@@ -29,7 +29,10 @@ const signup = async (req, res,next) => {
 
     try {
         await newUser.save();
-        res.send('User registered successfully');
+        res.status(201).json({
+            success: true,
+            message: 'SignUp Successful!!!'
+        });
     } catch (error) {
         next(error);
     }
